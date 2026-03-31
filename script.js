@@ -348,17 +348,47 @@ document.addEventListener("DOMContentLoaded", () => {
         const totalSlides = slides.length;
         const step = 100 / totalSlides;
         const lastSlideIndex = totalSlides - 1;
+        const visualSlideCount = totalSlides > 1 ? totalSlides - 1 : totalSlides;
+        const bannerTransitionDuration = 1100;
         let currentSlide = 0;
         let bannerSliderTimer = null;
+        let bannerResetTimer = null;
 
         bannerTrack.style.width = `${totalSlides * 100}%`;
         slides.forEach(slide => {
             slide.style.flex = `0 0 ${100 / totalSlides}%`;
         });
 
-        const moveBanner = (withTransition = true) => {
-            bannerTrack.style.transition = withTransition ? "transform 1.1s ease-in-out" : "none";
+        const shouldAnimateBanner = () => !reducedMotionMedia.matches;
+        const clearBannerReset = () => {
+            if(bannerResetTimer){
+                window.clearTimeout(bannerResetTimer);
+                bannerResetTimer = null;
+            }
+        };
+
+        const moveBanner = (withTransition = shouldAnimateBanner()) => {
+            bannerTrack.style.transition = withTransition ? `transform ${bannerTransitionDuration}ms ease-in-out` : "none";
             bannerTrack.style.transform = `translateX(-${currentSlide * step}%)`;
+        };
+
+        const resetBannerToStart = () => {
+            clearBannerReset();
+            currentSlide = 0;
+            moveBanner(false);
+        };
+
+        const scheduleBannerReset = () => {
+            clearBannerReset();
+
+            if(!shouldAnimateBanner() || currentSlide !== lastSlideIndex){
+                return;
+            }
+
+            // Keep the loop resilient even if the browser throttles or skips transition events.
+            bannerResetTimer = window.setTimeout(() => {
+                resetBannerToStart();
+            }, bannerTransitionDuration + 80);
         };
 
         const stopBannerAutoplay = () => {
@@ -366,17 +396,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.clearInterval(bannerSliderTimer);
                 bannerSliderTimer = null;
             }
+
+            clearBannerReset();
         };
 
         const nextBannerSlide = () => {
-            currentSlide += 1;
-            moveBanner(true);
+            if(visualSlideCount < 2){
+                return;
+            }
+
+            if(shouldAnimateBanner()){
+                if(currentSlide >= lastSlideIndex){
+                    resetBannerToStart();
+                }
+
+                currentSlide += 1;
+                moveBanner(true);
+                scheduleBannerReset();
+                return;
+            }
+
+            currentSlide = (currentSlide + 1) % visualSlideCount;
+            moveBanner(false);
         };
 
         const startBannerAutoplay = () => {
             stopBannerAutoplay();
 
-            if(totalSlides < 2){
+            if(visualSlideCount < 2){
                 return;
             }
 
@@ -385,23 +432,27 @@ document.addEventListener("DOMContentLoaded", () => {
             bannerSliderTimer = window.setInterval(nextBannerSlide, bannerAutoplayDelay);
         };
 
-        bannerTrack.addEventListener("transitionend", event => {
-            if(event.propertyName !== "transform" || currentSlide !== lastSlideIndex){
+        const handleBannerVisibilityChange = () => {
+            if(document.hidden){
+                stopBannerAutoplay();
                 return;
             }
 
-            currentSlide = 0;
-            moveBanner(false);
-        });
-
-        const handleBannerReducedMotionChange = () => {
-            if(reducedMotionMedia.matches){
-                currentSlide = 0;
+            if(currentSlide >= lastSlideIndex){
+                resetBannerToStart();
+            } else {
                 moveBanner(false);
             }
 
             startBannerAutoplay();
         };
+
+        const handleBannerReducedMotionChange = () => {
+            resetBannerToStart();
+            startBannerAutoplay();
+        };
+
+        document.addEventListener("visibilitychange", handleBannerVisibilityChange);
 
         if(typeof reducedMotionMedia.addEventListener === "function"){
             reducedMotionMedia.addEventListener("change", handleBannerReducedMotionChange);
