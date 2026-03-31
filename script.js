@@ -243,12 +243,28 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    const reveals = document.querySelectorAll(".reveal");
+    const reveals = Array.from(document.querySelectorAll(".reveal"));
+    document.querySelectorAll("[data-stagger]").forEach(group => {
+        Array.from(group.querySelectorAll("[data-stagger-item]")).forEach((item, index) => {
+            item.style.setProperty("--stagger-delay", `${index * 120}ms`);
+        });
+    });
+
+    const revealElement = element => {
+        if(element.classList.contains("show")){
+            return;
+        }
+
+        element.classList.add("show");
+        element.querySelectorAll("[data-stagger-item]").forEach(item => {
+            item.classList.add("is-stagger-visible");
+        });
+    };
 
     const revealOnScroll = () => {
         if(reducedMotionMedia.matches){
             reveals.forEach(el => {
-                el.classList.add("show");
+                revealElement(el);
             });
 
             return;
@@ -257,14 +273,35 @@ document.addEventListener("DOMContentLoaded", () => {
         reveals.forEach(el => {
             const top = el.getBoundingClientRect().top;
 
-            if(top < window.innerHeight - 100){
-                el.classList.add("show");
+            if(top < window.innerHeight * 0.86){
+                revealElement(el);
             }
         });
     };
 
-    const handlePageScroll = () => {
+    if(!reducedMotionMedia.matches && "IntersectionObserver" in window){
+        const revealObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if(!entry.isIntersecting){
+                    return;
+                }
+
+                revealElement(entry.target);
+                revealObserver.unobserve(entry.target);
+            });
+        }, {
+            threshold: 0.16,
+            rootMargin: "0px 0px -8% 0px"
+        });
+
+        reveals.forEach(el => {
+            revealObserver.observe(el);
+        });
+    } else {
         revealOnScroll();
+    }
+
+    const handlePageScroll = () => {
         updateActiveSection();
     };
 
