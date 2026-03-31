@@ -684,7 +684,7 @@ text-shadow:0 12px 32px rgba(0,0,0,0.32);
 
 .grid{
 display:grid;
-grid-template-columns:repeat(4, minmax(0, 1fr));
+grid-template-columns:repeat(3, minmax(0, 1fr));
 gap:24px;
 width:min(1240px, calc(100% - 16%));
 margin:34px auto 0;
