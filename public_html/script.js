@@ -202,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    document.querySelectorAll('a[href^="index.html#"]').forEach(link => {
+    document.querySelectorAll('a[href^="/index.html#"], a[href^="index.html#"]').forEach(link => {
         link.addEventListener("click", event => {
             const url = new URL(link.href, window.location.href);
             const targetId = url.hash.replace("#", "");
@@ -213,7 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             event.preventDefault();
             setStoredScrollTarget(targetId);
-            window.location.href = `index.html#${targetId}`;
+            window.location.href = `${url.pathname}${url.hash}`;
         });
     });
 
@@ -501,44 +501,244 @@ document.addEventListener("DOMContentLoaded", () => {
         startBannerAutoplay();
     }
 
-    const specialistCtas = document.querySelectorAll(".specialist-cta");
+    const partnersMarquees = Array.from(document.querySelectorAll(".partners-marquee"));
+
+    if(partnersMarquees.length){
+        const partnerTravelDurationMs = 20000;
+        let partnersMarqueeFrame = 0;
+
+        const updatePartnersMarqueeSpeed = () => {
+            partnersMarquees.forEach(marquee => {
+                const track = marquee.querySelector(".partners-track");
+                const firstList = marquee.querySelector(".partners-list");
+                const marqueeWidth = marquee.clientWidth;
+                const trackLoopWidth = firstList?.scrollWidth ?? 0;
+
+                if(!track || !marqueeWidth || !trackLoopWidth){
+                    return;
+                }
+
+                const durationSeconds = (trackLoopWidth / marqueeWidth) * (partnerTravelDurationMs / 1000);
+                track.style.setProperty("--partners-marquee-duration", `${durationSeconds.toFixed(2)}s`);
+            });
+        };
+
+        const schedulePartnersMarqueeSpeedUpdate = () => {
+            if(partnersMarqueeFrame){
+                return;
+            }
+
+            partnersMarqueeFrame = window.requestAnimationFrame(() => {
+                partnersMarqueeFrame = 0;
+                updatePartnersMarqueeSpeed();
+            });
+        };
+
+        if("ResizeObserver" in window){
+            const partnersResizeObserver = new ResizeObserver(() => {
+                schedulePartnersMarqueeSpeedUpdate();
+            });
+
+            partnersMarquees.forEach(marquee => {
+                partnersResizeObserver.observe(marquee);
+
+                const firstList = marquee.querySelector(".partners-list");
+
+                if(firstList){
+                    partnersResizeObserver.observe(firstList);
+                }
+            });
+        }
+
+        partnersMarquees.forEach(marquee => {
+            const partnerImages = Array.from(marquee.querySelectorAll("img"));
+
+            partnerImages.forEach(image => {
+                if(image.complete){
+                    return;
+                }
+
+                image.addEventListener("load", schedulePartnersMarqueeSpeedUpdate, { once: true });
+                image.addEventListener("error", schedulePartnersMarqueeSpeedUpdate, { once: true });
+            });
+        });
+
+        window.addEventListener("load", schedulePartnersMarqueeSpeedUpdate);
+        window.addEventListener("resize", schedulePartnersMarqueeSpeedUpdate);
+        schedulePartnersMarqueeSpeedUpdate();
+    }
+
+    const buildWhatsappUrl = message => {
+        if(!whatsappNumber){
+            return "";
+        }
+
+        return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message || whatsappMessage)}`;
+    };
+
+    const disableWhatsappLink = (link, opacity = "0.72") => {
+        if(!link){
+            return;
+        }
+
+        link.removeAttribute("target");
+        link.removeAttribute("rel");
+        link.setAttribute("aria-disabled", "true");
+        link.title = "Adicione o n\u00famero do WhatsApp da empresa para ativar este bot\u00e3o.";
+        link.style.opacity = opacity;
+        link.style.cursor = "not-allowed";
+
+        if(link.dataset.whatsappDisabledBound === "true"){
+            return;
+        }
+
+        link.addEventListener("click", event => {
+            if(link.getAttribute("aria-disabled") === "true"){
+                event.preventDefault();
+            }
+        });
+
+        link.dataset.whatsappDisabledBound = "true";
+    };
+
+    const enableWhatsappLink = link => {
+        if(!link){
+            return;
+        }
+
+        link.setAttribute("target", "_blank");
+        link.setAttribute("rel", "noopener noreferrer");
+        link.removeAttribute("aria-disabled");
+        link.removeAttribute("title");
+        link.style.opacity = "";
+        link.style.cursor = "";
+    };
+
+    const productCatalog = {
+        "plano-saude": {
+            description: "Ao contratar um plano de saude, voce garante acesso a consultas, exames e internacoes com mais rapidez e previsibilidade de custos. Nos analisamos seu perfil (individual, familiar ou empresarial) e indicamos as melhores operadoras, coberturas e redes credenciadas, sempre buscando o equilibrio entre preco e qualidade.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Plano de Saude."
+        },
+        "plano-odontologico": {
+            description: "O plano odontologico cobre atendimentos como consultas, limpezas, urgencias e diversos procedimentos dentarios. E uma solucao acessivel para manter a saude bucal em dia, com ampla rede credenciada e sem surpresas no orcamento.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Plano Odontologico."
+        },
+        "cartoes-beneficios": {
+            description: "Geralmente sao cartoes pre-pagos carregados pela empresa. As categorias (VA/VR) podem ser flexiveis, permitindo que o funcionario escolha onde usar o saldo.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Cartoes de Beneficios."
+        },
+        "seguro-vida": {
+            description: "O seguro de vida garante protecao financeira para voce e sua familia em casos de imprevistos, como falecimento, invalidez ou doencas graves. Tambem pode incluir coberturas adicionais e assistencia em vida, trazendo mais tranquilidade no presente e seguranca para o futuro.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro de Vida."
+        },
+        "seguro-viagem": {
+            description: "O seguro viagem oferece suporte durante viagens nacionais ou internacionais, cobrindo despesas medicas, extravio de bagagem, cancelamentos e outros imprevistos. E essencial para viajar com tranquilidade e evitar altos custos fora do seu pais ou cidade.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro Viagem."
+        },
+        "seguro-auto": {
+            description: "O seguro auto protege seu veiculo contra roubos, furtos, colisoes e danos a terceiros. A cobertura e personalizada de acordo com seu perfil e uso do carro, garantindo protecao completa e assistencia 24h quando voce precisar.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro Auto."
+        },
+        "seguro-residencial": {
+            description: "O seguro residencial protege sua casa contra riscos como incendio, roubo, danos eletricos e eventos naturais. Alem disso, pode incluir servicos como chaveiro, eletricista e encanador, trazendo seguranca e praticidade no dia a dia.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro Residencial."
+        },
+        "seguro-empresarial": {
+            description: "O seguro empresarial protege o seu negocio contra diversos riscos, como incendios, roubos, danos eletricos e responsabilidade civil. As coberturas sao adaptadas ao tipo de empresa, garantindo continuidade das operacoes mesmo diante de imprevistos.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro Empresarial."
+        },
+        "seguro-responsabilidade-civil-profissional": {
+            description: "Protege empresas e profissionais liberais contra prejuizos financeiros causados a terceiros por falhas, negligencia ou omissoes involuntarias na prestacao de servicos. Tambem conhecido como seguro do profissional, cobre custos de defesa judicial, acordos e indenizacoes.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro de Responsabilidade Civil Profissional."
+        },
+        "seguro-condominio": {
+            description: "O seguro condominio e obrigatorio e protege a estrutura do predio contra danos como incendios, explosoes e outros riscos. Tambem pode incluir coberturas adicionais para areas comuns e responsabilidade civil, garantindo mais seguranca para sindicos e moradores.",
+            whatsappMessage: "Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre Seguro Condominio."
+        }
+    };
+
+    const productCards = Array.from(document.querySelectorAll(".product-card"));
+    const productDetailSection = document.getElementById("produto-detalhe");
+    const productDetailIcon = document.getElementById("product-detail-icon");
+    const productDetailTitle = document.getElementById("product-detail-title");
+    const productDetailSummary = document.getElementById("product-detail-summary");
+    const productDetailDescription = document.getElementById("product-detail-description");
+    const productDetailContactCopy = document.getElementById("product-detail-contact-copy");
+    const productDetailWhatsapp = document.getElementById("product-detail-whatsapp");
+
+    if(productCards.length && productDetailSection && productDetailIcon && productDetailTitle && productDetailSummary && productDetailDescription && productDetailContactCopy && productDetailWhatsapp){
+        const openProductDetail = productCard => {
+            const productKey = productCard.dataset.productKey || "";
+            const productCopy = productCatalog[productKey] || {};
+            const productImage = productCard.querySelector(".circle img");
+            const productTitle = productCard.querySelector(".product-card-title")?.textContent.trim() || "Produto";
+            const productSummary = productCard.querySelector(".product-card-summary")?.textContent.trim() || "";
+            const productMessage = productCopy.whatsappMessage || `Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre ${productTitle}.`;
+
+            if(productImage){
+                productDetailIcon.src = productImage.getAttribute("src") || productDetailIcon.src;
+            }
+
+            productDetailTitle.textContent = productTitle;
+            productDetailSummary.textContent = productSummary;
+            productDetailDescription.textContent = productCopy.description || `Esta area foi preparada para receber um conteudo exclusivo sobre ${productTitle}. Enquanto isso, a equipe da Rebello pode orientar voce pelo WhatsApp.`;
+            productDetailContactCopy.textContent = `Fale com a equipe da Rebello para receber orientacao personalizada sobre ${productTitle}.`;
+
+            if(whatsappNumber){
+                enableWhatsappLink(productDetailWhatsapp);
+                productDetailWhatsapp.href = buildWhatsappUrl(productMessage);
+            } else {
+                disableWhatsappLink(productDetailWhatsapp, "0.72");
+            }
+
+            productCards.forEach(card => {
+                const isActive = card === productCard;
+                card.classList.toggle("is-active", isActive);
+                card.setAttribute("aria-expanded", String(isActive));
+            });
+
+            productDetailSection.hidden = false;
+
+            window.requestAnimationFrame(() => {
+                scrollToSection(productDetailSection);
+
+                try{
+                    productDetailSection.focus({ preventScroll: true });
+                } catch(error){
+                    productDetailSection.focus();
+                }
+            });
+        };
+
+        productCards.forEach(card => {
+            card.addEventListener("click", () => {
+                openProductDetail(card);
+            });
+        });
+    }
+
+    const specialistCtas = Array.from(document.querySelectorAll(".specialist-cta")).filter(link => !link.classList.contains("whatsapp"));
     const whatsapp = document.querySelector(".whatsapp");
 
     if(whatsappNumber){
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+        const whatsappUrl = buildWhatsappUrl(whatsappMessage);
 
         specialistCtas.forEach(link => {
+            enableWhatsappLink(link);
             link.href = whatsappUrl;
         });
 
         if(whatsapp){
+            enableWhatsappLink(whatsapp);
             whatsapp.href = whatsappUrl;
         }
     } else {
         specialistCtas.forEach(link => {
-            link.removeAttribute("target");
-            link.removeAttribute("rel");
-            link.setAttribute("aria-disabled", "true");
-            link.title = "Adicione o n\u00famero do WhatsApp da empresa para ativar este bot\u00e3o.";
-            link.style.opacity = "0.72";
-            link.style.cursor = "not-allowed";
-
-            link.addEventListener("click", event => {
-                event.preventDefault();
-            });
+            disableWhatsappLink(link, "0.72");
         });
 
         if(whatsapp){
-            whatsapp.removeAttribute("target");
-            whatsapp.removeAttribute("rel");
-            whatsapp.setAttribute("aria-disabled", "true");
-            whatsapp.title = "Adicione o n\u00famero do WhatsApp da empresa para ativar este bot\u00e3o.";
-            whatsapp.style.opacity = "0.88";
-            whatsapp.style.cursor = "not-allowed";
-
-            whatsapp.addEventListener("click", event => {
-                event.preventDefault();
-            });
+            disableWhatsappLink(whatsapp, "0.88");
         }
     }
 });

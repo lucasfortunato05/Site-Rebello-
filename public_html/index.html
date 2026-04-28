@@ -8,7 +8,7 @@
 
 <title>Rebello Sa&uacute;de &amp; Seguros</title>
 
-<link rel="stylesheet" href="/style.css?v=20260403">
+<link rel="stylesheet" href="/style.css?v=20260427-1">
 <link rel="icon" href="/assets/favicon/favicon.svg?v=20260403" type="image/svg+xml">
 <link rel="icon" href="/assets/favicon/favicon-32x32.png?v=20260403" sizes="32x32" type="image/png">
 <link rel="icon" href="/assets/favicon/favicon-16x16.png?v=20260403" sizes="16x16" type="image/png">
@@ -52,11 +52,11 @@
             <a href="/equipe.html" class="btn-light">Conhe&ccedil;a quem est&aacute; por tr&aacute;s da Rebello</a>
         </div>
 
-        <div class="hero-trust" aria-label="Pontos de confian&ccedil;a">
-            <span>Mais de 20 anos de experi&ecirc;ncia</span>
-            <span>Orienta&ccedil;&atilde;o clara em cada etapa</span>
-            <span>Prote&ccedil;&atilde;o para pessoas e empresas</span>
-        </div>
+        <ul class="hero-trust">
+            <li>Mais de 20 anos de experi&ecirc;ncia</li>
+            <li>Orienta&ccedil;&atilde;o clara em cada etapa</li>
+            <li>Prote&ccedil;&atilde;o para pessoas e empresas</li>
+        </ul>
     </div>
 
     <div class="hero-visual">
@@ -131,60 +131,188 @@
         </div>
     </div>
 
-    <div class="grid reveal" data-stagger>
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/plano-saude.png" alt="" loading="lazy"></div>
-            <h3>Plano de Sa&uacute;de</h3>
-            <p>Alternativas individuais, familiares e empresariais com orienta&ccedil;&atilde;o clara na escolha.</p>
-        </article>
+    <div class="products-grid reveal" data-stagger>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="plano-saude" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/plano-saude.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Plano de Sa&uacute;de</span>
+            <span class="product-card-summary">Consultas, exames e interna&ccedil;&otilde;es com mais rapidez, previsibilidade de custos e escolha orientada.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/odonto.png" alt="" loading="lazy"></div>
-            <h3>Plano Odontol&oacute;gico</h3>
-            <p>Solu&ccedil;&otilde;es para ampliar cuidado e previsibilidade no dia a dia com atendimento pr&aacute;tico.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="plano-odontologico" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/odonto.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Plano Odontol&oacute;gico</span>
+            <span class="product-card-summary">Consultas, limpezas, urg&ecirc;ncias e procedimentos com ampla rede credenciada e custo acess&iacute;vel.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/cartoes-beneficios.png" alt="" loading="lazy"></div>
-            <h3>Cart&otilde;es de Benef&iacute;cios</h3>
-            <p>Vantagens e descontos em sa&uacute;de, bem-estar e servi&ccedil;os com apoio na escolha da op&ccedil;&atilde;o ideal.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="cartoes-beneficios" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/cartoes-beneficios.png?v=20260427-5" alt="" loading="lazy"></span>
+            <span class="product-card-title">Cart&otilde;es de Benef&iacute;cios</span>
+            <span class="product-card-summary">Cart&otilde;es pr&eacute;-pagos com categorias flex&iacute;veis, dando mais liberdade para o uso do saldo.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/vida.png" alt="" loading="lazy"></div>
-            <h3>Seguro de Vida</h3>
-            <p>Prote&ccedil;&atilde;o financeira para pessoas, fam&iacute;lias e equipes com foco em tranquilidade.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-vida" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/vida.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro de Vida</span>
+            <span class="product-card-summary">Prote&ccedil;&atilde;o financeira para voc&ecirc; e sua fam&iacute;lia em casos de imprevistos e invalidez.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/viagem.png" alt="" loading="lazy"></div>
-            <h3>Seguro Viagem</h3>
-            <p>Suporte para viagens nacionais e internacionais com mais seguran&ccedil;a e respaldo.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-viagem" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/viagem.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro Viagem</span>
+            <span class="product-card-summary">Suporte em viagens nacionais e internacionais com cobertura para despesas m&eacute;dicas e imprevistos.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/auto.png" alt="" loading="lazy"></div>
-            <h3>Seguro Auto</h3>
-            <p>Coberturas para ve&iacute;culos com avalia&ccedil;&atilde;o cuidadosa do perfil e da rotina de uso.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-auto" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/auto.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro Auto</span>
+            <span class="product-card-summary">Prote&ccedil;&atilde;o contra roubo, furto, colis&otilde;es e danos a terceiros com assist&ecirc;ncia 24h.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/residencial.png" alt="" loading="lazy"></div>
-            <h3>Seguro Residencial</h3>
-            <p>Prote&ccedil;&atilde;o para o seu lar com solu&ccedil;&otilde;es adequadas ao seu patrim&ocirc;nio.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-residencial" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/residencial.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro Residencial</span>
+            <span class="product-card-summary">Sua casa protegida contra inc&ecirc;ndio, roubo, danos el&eacute;tricos e eventos naturais.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/empresarial.png" alt="" loading="lazy"></div>
-            <h3>Seguro Empresarial</h3>
-            <p>Amparo para a opera&ccedil;&atilde;o do neg&oacute;cio com apoio consultivo na composi&ccedil;&atilde;o da cobertura.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-empresarial" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/empresarial.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro Empresarial</span>
+            <span class="product-card-summary">Prote&ccedil;&atilde;o para o neg&oacute;cio contra inc&ecirc;ndios, roubos, danos el&eacute;tricos e responsabilidade civil.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
 
-        <article class="card" data-stagger-item>
-            <div class="circle"><img src="/assets/seguros/condominio.png" alt="" loading="lazy"></div>
-            <h3>Seguro Condom&iacute;nio</h3>
-            <p>Op&ccedil;&otilde;es pensadas para gest&atilde;o mais segura e respons&aacute;vel de espa&ccedil;os coletivos.</p>
-        </article>
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-responsabilidade-civil-profissional" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/responsabilidade-civil-profissional.png?v=20260424-10" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro de Responsabilidade Civil Profissional</span>
+            <span class="product-card-summary">Cobertura para falhas, neglig&ecirc;ncia ou omiss&otilde;es involunt&aacute;rias na presta&ccedil;&atilde;o de servi&ccedil;os.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
+
+        <button type="button" class="card product-card" data-stagger-item data-product-key="seguro-condominio" aria-controls="produto-detalhe" aria-expanded="false">
+            <span class="circle"><img src="/assets/seguros/condominio.png" alt="" loading="lazy"></span>
+            <span class="product-card-title">Seguro Condom&iacute;nio</span>
+            <span class="product-card-summary">Prote&ccedil;&atilde;o obrigat&oacute;ria para a estrutura do pr&eacute;dio, &aacute;reas comuns e responsabilidade civil.</span>
+            <span class="product-card-hint">Saiba mais</span>
+        </button>
+    </div>
+
+    <div id="produto-detalhe" class="product-detail-shell" hidden tabindex="-1" aria-labelledby="product-detail-title">
+        <div class="product-detail-panel">
+            <div class="product-detail-main">
+                <div class="product-detail-header">
+                    <div class="product-detail-icon-wrap">
+                        <img id="product-detail-icon" src="/assets/seguros/plano-saude.png" alt="" loading="lazy">
+                    </div>
+
+                    <div class="product-detail-heading">
+                        <p class="product-detail-kicker">Produto selecionado</p>
+                        <h3 id="product-detail-title">Plano de Sa&uacute;de</h3>
+                    </div>
+                </div>
+
+                <p id="product-detail-summary" class="product-detail-summary"></p>
+                <p id="product-detail-description" class="product-detail-description"></p>
+            </div>
+
+            <aside class="product-detail-aside" aria-labelledby="product-detail-aside-title">
+                <p class="product-detail-aside-label">Atendimento pelo WhatsApp</p>
+                <h3 id="product-detail-aside-title">Quer entender melhor esse produto?</h3>
+                <p id="product-detail-contact-copy">Fale com a equipe da Rebello para receber orientacao personalizada sobre este produto.</p>
+                <a id="product-detail-whatsapp" class="btn-gold product-detail-whatsapp" href="https://wa.me/555125005310" target="_blank" rel="noopener noreferrer">Conversar sobre este produto</a>
+            </aside>
+        </div>
+    </div>
+</section>
+
+<section class="partners-showcase reveal" aria-labelledby="partners-title">
+    <div class="partners-heading-wrap">
+        <p id="partners-title" class="partners-title">Nossos parceiros</p>
+        <p class="partners-sr-only">Parceiros como Onmed, DoctorClin, Seguros Unimed, Omint, use, Azul Seguros, Amil, Bradesco Seguros, Porto Seguro, Aliro Seguro, MedSenior, Yelum, HDI Seguros, Novo Seguros, MAPFRE, Itau, MetLife, Suhai, AXA, Azos, Tokio Marine, Sulmed, Prudential, GBOEX, Darwin Seguros, mbm e outras marcas parceiras.</p>
+    </div>
+
+    <div class="partners-marquee partners-marquee-forward" aria-hidden="true">
+        <div class="partners-track">
+            <ul class="partners-list">
+                <li class="partner-badge"><img src="/assets/parceiros/onmed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/seguros-unimed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/use.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/amil.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/porto-seguro.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/medsenior.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/hdi-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/mapfre.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/metlife.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/axa.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/tokio-marine.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/prudential.png" alt="" loading="lazy"></li>
+                <li class="partner-badge partner-badge-darwin">
+                    <img src="/assets/parceiros/darwin-seguros.png" class="partner-badge-darwin-text" alt="" loading="lazy">
+                    <img src="/assets/parceiros/parceiro-d.png" class="partner-badge-darwin-icon" alt="" loading="lazy">
+                </li>
+                <li class="partner-badge"><img src="/assets/parceiros/mbm.png" alt="" loading="lazy"></li>
+            </ul>
+
+            <ul class="partners-list" aria-hidden="true">
+                <li class="partner-badge"><img src="/assets/parceiros/onmed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/seguros-unimed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/use.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/amil.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/porto-seguro.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/medsenior.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/hdi-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/mapfre.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/metlife.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/axa.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/tokio-marine.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/prudential.png" alt="" loading="lazy"></li>
+                <li class="partner-badge partner-badge-darwin">
+                    <img src="/assets/parceiros/darwin-seguros.png" class="partner-badge-darwin-text" alt="" loading="lazy">
+                    <img src="/assets/parceiros/parceiro-d.png" class="partner-badge-darwin-icon" alt="" loading="lazy">
+                </li>
+                <li class="partner-badge"><img src="/assets/parceiros/mbm.png" alt="" loading="lazy"></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="partners-marquee partners-marquee-reverse" aria-hidden="true">
+        <div class="partners-track">
+            <ul class="partners-list">
+                <li class="partner-badge"><img src="/assets/parceiros/doctorclin.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/omint.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/azul-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/bradesco-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/aliro-seguro.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/yelum.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/novo-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/itau.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/suhai.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/azos.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/sulmed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/gboex.png" alt="" loading="lazy"></li>
+            </ul>
+
+            <ul class="partners-list" aria-hidden="true">
+                <li class="partner-badge"><img src="/assets/parceiros/doctorclin.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/omint.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/azul-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/bradesco-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/aliro-seguro.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/yelum.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/novo-seguros.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/itau.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/suhai.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/azos.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/sulmed.png" alt="" loading="lazy"></li>
+                <li class="partner-badge"><img src="/assets/parceiros/gboex.png" alt="" loading="lazy"></li>
+            </ul>
+        </div>
     </div>
 </section>
 
@@ -281,9 +409,19 @@
 </div>
 
 <div class="footer-social">
+<a href="https://wa.me/555125005310" class="social-link specialist-cta" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp da Rebello Sa&uacute;de &amp; Seguros">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M19.05 4.94A9.77 9.77 0 0 0 12.09 2a9.9 9.9 0 0 0-8.57 14.85L2 22l5.33-1.39A9.92 9.92 0 0 0 12.08 22h.01a9.91 9.91 0 0 0 6.96-17.06Zm-6.96 15.39h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.16.83.85-3.08-.2-.31a8.24 8.24 0 1 1 7 3.89Zm4.52-6.15c-.25-.12-1.48-.73-1.7-.82-.23-.08-.39-.12-.56.12-.17.25-.64.82-.79.98-.15.17-.29.19-.54.07-.25-.12-1.03-.38-1.96-1.21-.72-.64-1.2-1.43-1.35-1.67-.14-.24-.02-.37.11-.49.12-.12.25-.29.38-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.35-.76-1.85-.2-.49-.41-.43-.56-.44h-.48c-.17 0-.43.06-.66.31s-.87.85-.87 2.08.89 2.42 1.02 2.58c.12.17 1.74 2.66 4.22 3.73.59.26 1.06.42 1.42.54.6.19 1.15.16 1.58.1.48-.07 1.48-.61 1.69-1.2.21-.6.21-1.11.14-1.21-.06-.1-.23-.16-.48-.29Z"/>
+</svg>
+</a>
 <a href="https://www.instagram.com/rebellosaudeeseguros?igsh=MXJjcDZ2cnprZmtjeQ%3D%3D&amp;utm_source=qr" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Rebello Sa&uacute;de &amp; Seguros">
 <svg viewBox="0 0 24 24" aria-hidden="true">
 <path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5Zm0 2.2A2.8 2.8 0 0 0 4.2 7v10A2.8 2.8 0 0 0 7 19.8h10a2.8 2.8 0 0 0 2.8-2.8V7A2.8 2.8 0 0 0 17 4.2H7Zm10.6 1.7a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4ZM12 7a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 2.2A2.8 2.8 0 1 0 12 14.8 2.8 2.8 0 0 0 12 9.2Z"/>
+</svg>
+</a>
+<a href="https://www.linkedin.com/company/rebello-sa%C3%BAde-seguros/" class="social-link" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn da Rebello Sa&uacute;de &amp; Seguros">
+<svg viewBox="0 0 24 24" aria-hidden="true">
+<path d="M6.94 8.5H3.56V20h3.38V8.5ZM5.25 7.03c1.08 0 1.94-.9 1.94-2.01A1.95 1.95 0 0 0 5.25 3C4.17 3 3.3 3.9 3.3 5.02c0 1.11.87 2.01 1.95 2.01ZM20.7 20h-3.37v-5.6c0-1.34-.03-3.07-1.84-3.07-1.84 0-2.13 1.46-2.13 2.97V20h-3.37V8.5h3.24v1.57h.05c.45-.86 1.56-1.77 3.22-1.77 3.44 0 4.08 2.31 4.08 5.32V20Z"/>
 </svg>
 </a>
 </div>
@@ -336,8 +474,7 @@ aria-label="Abrir localiza&ccedil;&atilde;o da Rebello no Google Maps">
 </div>
 
 <div class="footer-bottom">
-<p>Rebello Sa&uacute;de &amp; Seguros</p>
-<p>Prote&ccedil;&atilde;o com experi&ecirc;ncia, proximidade e confian&ccedil;a.</p>
+<p class="footer-legal">Rebello Sa&uacute;de &amp; Seguros | Todos os direitos reservados &agrave; Rebello. &copy; 2026 | <a href="/politica-de-privacidade.html" class="footer-legal-link">Pol&iacute;tica de Privacidade</a></p>
 </div>
 
 </div>
@@ -356,6 +493,6 @@ aria-label="Abrir localiza&ccedil;&atilde;o da Rebello no Google Maps">
 </span>
 </a>
 
-<script src="/script.js?v=20260403"></script>
+<script src="/script.js?v=20260427-1"></script>
 </body>
 </html>
