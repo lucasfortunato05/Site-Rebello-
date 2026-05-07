@@ -10,6 +10,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const sections = navLinks
         .map(link => document.querySelector(link.getAttribute("href")))
         .filter(Boolean);
+    const getCleanPathname = () => {
+        const cleanPath = window.location.pathname.replace(/\/index\.html$/i, "/");
+
+        return cleanPath || "/";
+    };
+    const cleanBrowserUrl = () => {
+        if(!window.history || typeof window.history.replaceState !== "function"){
+            return;
+        }
+
+        const cleanPath = getCleanPathname();
+        const cleanUrl = `${cleanPath}${window.location.search}`;
+
+        if(window.location.pathname !== cleanPath || window.location.hash){
+            window.history.replaceState(window.history.state, document.title, cleanUrl);
+        }
+    };
 
     const getStoredScrollTarget = () => {
         try{
@@ -218,6 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const initialTargetId = getStoredScrollTarget() || getHashScrollTarget();
+    const shouldCleanInitialUrl = Boolean(window.location.hash) || /\/index\.html$/i.test(window.location.pathname);
 
     if(initialTargetId){
         const initialTarget = document.getElementById(initialTargetId);
@@ -230,6 +248,10 @@ document.addEventListener("DOMContentLoaded", () => {
             initialScrollHandled = true;
             scrollToSection(initialTarget, "auto");
             clearStoredScrollTarget();
+
+            if(shouldCleanInitialUrl){
+                cleanBrowserUrl();
+            }
         };
 
         if(initialTarget){
@@ -240,7 +262,13 @@ document.addEventListener("DOMContentLoaded", () => {
             window.addEventListener("load", runInitialScroll, { once: true });
         } else {
             clearStoredScrollTarget();
+
+            if(shouldCleanInitialUrl){
+                cleanBrowserUrl();
+            }
         }
+    } else if(shouldCleanInitialUrl){
+        cleanBrowserUrl();
     }
 
     const reveals = Array.from(document.querySelectorAll(".reveal"));
@@ -719,6 +747,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const specialistCtas = Array.from(document.querySelectorAll(".specialist-cta")).filter(link => !link.classList.contains("whatsapp"));
     const whatsapp = document.querySelector(".whatsapp");
+    const footer = document.querySelector(".site-footer");
+    const contactBands = Array.from(document.querySelectorAll(".contact-band"));
+    const whatsappHideZones = [];
+
+    if(contactBands.length){
+        whatsappHideZones.push(contactBands[contactBands.length - 1]);
+    }
+
+    if(footer){
+        whatsappHideZones.push(footer);
+    }
 
     if(whatsappNumber){
         const whatsappUrl = buildWhatsappUrl(whatsappMessage);
@@ -739,6 +778,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if(whatsapp){
             disableWhatsappLink(whatsapp, "0.88");
+        }
+    }
+
+    if(whatsapp && whatsappHideZones.length){
+        const setWhatsappVisibility = shouldHide => {
+            whatsapp.classList.toggle("is-hidden", shouldHide);
+        };
+
+        if("IntersectionObserver" in window){
+            const visibleHideZones = new Set();
+            const whatsappHideObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if(entry.isIntersecting){
+                        visibleHideZones.add(entry.target);
+                    } else {
+                        visibleHideZones.delete(entry.target);
+                    }
+                });
+
+                setWhatsappVisibility(visibleHideZones.size > 0);
+            }, {
+                threshold: 0.12
+            });
+
+            whatsappHideZones.forEach(zone => {
+                whatsappHideObserver.observe(zone);
+            });
+        } else {
+            const syncWhatsappVisibility = () => {
+                const hideWhatsapp = whatsappHideZones.some(zone => {
+                    const rect = zone.getBoundingClientRect();
+
+                    return rect.top < window.innerHeight * 0.92 && rect.bottom > window.innerHeight * 0.08;
+                });
+
+                setWhatsappVisibility(hideWhatsapp);
+            };
+
+            window.addEventListener("scroll", syncWhatsappVisibility, { passive: true });
+            window.addEventListener("resize", syncWhatsappVisibility);
+            syncWhatsappVisibility();
         }
     }
 });
