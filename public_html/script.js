@@ -7,8 +7,32 @@ document.addEventListener("DOMContentLoaded", () => {
     const mobileNavMedia = window.matchMedia("(max-width: 760px)");
     const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
     const navLinks = Array.from(document.querySelectorAll('.menu a[href^="#"]'));
+    const safeTargetIdPattern = /^[A-Za-z][A-Za-z0-9_-]{0,80}$/;
+    const normalizeTargetId = value => {
+        const targetId = String(value || "").replace(/^#/, "").trim();
+
+        if(!safeTargetIdPattern.test(targetId)){
+            return "";
+        }
+
+        return targetId;
+    };
+    const getHashTargetId = value => {
+        const rawTargetId = String(value || "").replace(/^#/, "");
+
+        try{
+            return normalizeTargetId(decodeURIComponent(rawTargetId));
+        } catch(error){
+            return normalizeTargetId(rawTargetId);
+        }
+    };
+    const getTargetByHash = value => {
+        const targetId = getHashTargetId(value);
+
+        return targetId ? document.getElementById(targetId) : null;
+    };
     const sections = navLinks
-        .map(link => document.querySelector(link.getAttribute("href")))
+        .map(link => getTargetByHash(link.getAttribute("href")))
         .filter(Boolean);
     const getCleanPathname = () => {
         const cleanPath = window.location.pathname.replace(/\/index\.html$/i, "/");
@@ -30,15 +54,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const getStoredScrollTarget = () => {
         try{
-            return window.sessionStorage.getItem(crossPageScrollKey);
+            return normalizeTargetId(window.sessionStorage.getItem(crossPageScrollKey));
         } catch(error){
             return "";
         }
     };
 
     const setStoredScrollTarget = targetId => {
+        const normalizedTargetId = normalizeTargetId(targetId);
+
+        if(!normalizedTargetId){
+            return;
+        }
+
         try{
-            window.sessionStorage.setItem(crossPageScrollKey, targetId);
+            window.sessionStorage.setItem(crossPageScrollKey, normalizedTargetId);
         } catch(error){
             // Ignore storage restrictions and fall back to the URL hash.
         }
@@ -53,17 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const getHashScrollTarget = () => {
-        const rawHash = window.location.hash.replace("#", "");
-
-        if(!rawHash){
-            return "";
-        }
-
-        try{
-            return decodeURIComponent(rawHash);
-        } catch(error){
-            return rawHash;
-        }
+        return getHashTargetId(window.location.hash);
     };
 
     const closeMenu = () => {
@@ -210,7 +230,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            const target = document.querySelector(targetSelector);
+            const target = getTargetByHash(targetSelector);
 
             if(target){
                 e.preventDefault();
@@ -222,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll('a[href^="/index.html#"], a[href^="index.html#"]').forEach(link => {
         link.addEventListener("click", event => {
             const url = new URL(link.href, window.location.href);
-            const targetId = url.hash.replace("#", "");
+            const targetId = getHashTargetId(url.hash);
 
             if(!targetId){
                 return;
@@ -230,7 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             event.preventDefault();
             setStoredScrollTarget(targetId);
-            window.location.href = `${url.pathname}${url.hash}`;
+            window.location.href = `${url.pathname}#${targetId}`;
         });
     });
 
@@ -704,7 +724,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const productMessage = productCopy.whatsappMessage || `Ola! Vim pelo site da Rebello Saude & Seguros e gostaria de falar sobre ${productTitle}.`;
 
             if(productImage){
-                productDetailIcon.src = productImage.getAttribute("src") || productDetailIcon.src;
+                const productImageSrc = productImage.getAttribute("src") || "";
+
+                if(productImageSrc.startsWith("/assets/seguros/")){
+                    productDetailIcon.src = productImageSrc;
+                }
             }
 
             productDetailTitle.textContent = productTitle;

@@ -1,0 +1,24 @@
+Options -Indexes
+
+RemoveHandler .php .php3 .php4 .php5 .php7 .php8 .phtml .phar .cgi .pl .py .rb .sh .asp .aspx .jsp .jspx
+RemoveType .php .php3 .php4 .php5 .php7 .php8 .phtml .phar .cgi .pl .py .rb .sh .asp .aspx .jsp .jspx
+
+<IfModule mod_php.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_php7.c>
+    php_flag engine off
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_flag engine off
+</IfModule>
+
+<FilesMatch "\.(?:php[0-9]?|phtml|phar|cgi|pl|py|rb|sh|asp|aspx|jsp|jspx|war|jar|exe|dll|bat|cmd|ps1)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "(^\.|\.bak$|\.backup(?:[-.].*)?$|\.old$|\.orig$|\.save$|~$|(?:^|[._-])backup[-.])">
+    Require all denied
+</FilesMatch>
